@@ -1,0 +1,5 @@
+Service:
+http://localhost:8000/trading-service
+
+H2 Console
+http://localhost:8000/trading-service/h2-console
