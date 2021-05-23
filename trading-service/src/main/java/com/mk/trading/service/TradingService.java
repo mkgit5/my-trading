@@ -11,9 +11,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import com.mk.trading.common.domain.Stock;
 import com.mk.trading.common.domain.StockOrder;
@@ -55,7 +53,10 @@ public class TradingService {
 			final List<Stock> stocks = new ArrayList<>();
 			stocks.add(stockOpt.get());
 
-			this.populateStocks(stocks);
+			List<StockDto> stockDtos = this.populateStocks(stocks);
+			if (!stockDtos.isEmpty()) {
+				stockDto = stockDtos.get(0);
+			}
 		}
 
 		logger.info("STOCK=", stockDto != null ? stockDto.toString() : "NULL");
@@ -72,7 +73,8 @@ public class TradingService {
 			final Stock stock = stockOpt.get();
 
 			logger.info("{}={}", "MESSAGE", "Checking whether any stocks available to sell");
-			final Optional<Long> sellQty = stock.getStockOrders().stream().map(m -> m.getSellQuantity()).reduce(Long::sum);
+			final Optional<Long> sellQty = stock.getStockOrders().stream().map(m -> m.getSellQuantity())
+					.reduce(Long::sum);
 			if (sellQty.isPresent()) {
 				if ((sellQty.get() + stockOrderDto.getSellQuantity()) > stock.getBuyQuantity()) {
 					throw new RuntimeException("No stocks found to sell or invalid request");
@@ -132,13 +134,14 @@ public class TradingService {
 		final Map<String, String> uriVariables = new HashMap<>();
 		uriVariables.put("taxId", taxId.toString());
 
-		final ResponseEntity<TaxDto> responseEntity = new RestTemplate()
-				.getForEntity("http://localhost:8100/tax-service/{taxId}", TaxDto.class, uriVariables);
+//		final ResponseEntity<TaxDto> responseEntity = new RestTemplate()
+//				.getForEntity("http://localhost:8100/tax-service/{taxId}", TaxDto.class, uriVariables);
+//		return responseEntity.getBody();
 
 		final TaxDto tradingTax = taxServiceProxy.fetchTradingTax(taxId);
 		logger.info("TAX={}", tradingTax);
 
-		return responseEntity.getBody();
+		return tradingTax;
 	}
 
 	private List<StockDto> populateStocks(final List<Stock> stocks) {

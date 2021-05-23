@@ -10,6 +10,8 @@
 	<description>Demo project for Spring Boot</description>
     
     <modules>
+        <module>./naming-server</module>
+        <module>./api-gateway</module>
         <module>./trading-library</module>
         <module>./trading-service</module>
         <module>./tax-service</module>
