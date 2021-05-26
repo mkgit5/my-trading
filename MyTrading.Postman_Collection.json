@@ -1,0 +1,308 @@
+{
+	"info": {
+		"_postman_id": "7e2e73ae-7024-422a-96bd-8c2d1d90ef0a",
+		"name": "MyTrading",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "trading-service",
+			"item": [
+				{
+					"name": "stock",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}:8000/trading-service/stock",
+							"host": [
+								"{{url}}"
+							],
+							"port": "8000",
+							"path": [
+								"trading-service",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stock\" : \"ABC12\",\n    \"buyQuantity\" : 100,\n    \"buyPrice\" : 150\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}:8000/trading-service/stock",
+							"host": [
+								"{{url}}"
+							],
+							"port": "8000",
+							"path": [
+								"trading-service",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock/{purchased}",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sellQuantity\" : 100,\n    \"sellPrice\" : 150\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}:8000/trading-service/stock/1",
+							"host": [
+								"{{url}}"
+							],
+							"port": "8000",
+							"path": [
+								"trading-service",
+								"stock",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "tax/{taxId}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}:8000/trading-service/tax/1",
+							"host": [
+								"{{url}}"
+							],
+							"port": "8000",
+							"path": [
+								"trading-service",
+								"tax",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "tax-service",
+			"item": [
+				{
+					"name": "/tax-service/{taxId}",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}:8100/tax-service/1",
+							"host": [
+								"{{url}}"
+							],
+							"port": "8100",
+							"path": [
+								"tax-service",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "naming-server",
+			"item": [
+				{
+					"name": "/eureka",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}:8761",
+							"host": [
+								"{{url}}"
+							],
+							"port": "8761"
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "api-gateway",
+			"item": [
+				{
+					"name": "stock",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"stock\" : \"ABC12\",\n    \"buyQuantity\" : 100,\n    \"buyPrice\" : 150\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}:8765/trading-service/stock",
+							"host": [
+								"{{url}}"
+							],
+							"port": "8765",
+							"path": [
+								"trading-service",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stock",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}:8765/trading-service/stock",
+							"host": [
+								"{{url}}"
+							],
+							"port": "8765",
+							"path": [
+								"trading-service",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "trading-service/{stockId}",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"sellQuantity\" : 100,\n    \"sellPrice\" : 150\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}:8765/trading-service/stock/1",
+							"host": [
+								"{{url}}"
+							],
+							"port": "8765",
+							"path": [
+								"trading-service",
+								"stock",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "tax/{taxId}",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}:8765/trading-service/tax/1",
+							"host": [
+								"{{url}}"
+							],
+							"port": "8765",
+							"path": [
+								"trading-service",
+								"tax",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "jenkins-docker",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}:8888",
+					"host": [
+						"{{url}}"
+					],
+					"port": "8888"
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost"
+		}
+	]
+}
