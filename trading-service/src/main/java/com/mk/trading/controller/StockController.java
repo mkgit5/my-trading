@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,33 +13,38 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mk.trading.common.dto.StockDto;
 import com.mk.trading.common.dto.StockOrderDto;
 import com.mk.trading.common.dto.TaxDto;
-import com.mk.trading.service.TradingService;
+import com.mk.trading.service.StockService;
 
 @RestController
-public class TradingController {
+public class StockController {
 
 	@Autowired
-	private TradingService tradingService;
+	private StockService stockService;
 
-	@GetMapping
+	@PostMapping(value = "/stock")
+	public StockDto buyStock(@RequestBody StockDto stockDto) {
+		return stockService.buyStock(stockDto);
+	}
+
+	@GetMapping(value = "/stock")
 	public List<StockDto> fetchAllStocks() {
-		return tradingService.fetchAllStocks();
+		return stockService.fetchAllStocks();
 	}
 
-	@GetMapping(value = "/{purchaseId}")
-	public StockDto fetchStockByPurchaseId(@PathVariable Long purchaseId) {
-		return tradingService.fetchStockByPurchaseId(purchaseId);
+	@GetMapping(value = "/stock/{purchaseId}")
+	public List<StockDto> fetchStockByPurchaseId(@PathVariable(required = false) Long purchaseId) {
+		return stockService.fetchStockByPurchaseId(purchaseId);
 	}
 
-	@PutMapping(value = "/{purchaseId}")
+	@PutMapping(value = "/stock/{purchaseId}")
 	public StockOrderDto sellStockByPurchaseId(@PathVariable Long purchaseId,
 			@RequestBody StockOrderDto stockOrderDto) {
-		return tradingService.sellStockByPurchaseId(purchaseId, stockOrderDto);
+		return stockService.sellStockByPurchaseId(purchaseId, stockOrderDto);
 	}
-	
+
 	@GetMapping("/tax/{taxId}")
-	public TaxDto fetchTax(@PathVariable Long taxId) {
-		return tradingService.fetchTax(taxId);
+	public TaxDto fetchTaxTesting(@PathVariable Long taxId) {
+		return stockService.fetchTax(taxId);
 	}
 
 }

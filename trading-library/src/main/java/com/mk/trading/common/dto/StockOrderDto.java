@@ -41,4 +41,10 @@ public class StockOrderDto {
 		this.sellPrice = sellPrice;
 	}
 
+	@Override
+	public String toString() {
+		return "StockOrderDto [id=" + id + ", purchaseId=" + purchaseId + ", sellQuantity=" + sellQuantity
+				+ ", sellPrice=" + sellPrice + "]";
+	}
+
 }

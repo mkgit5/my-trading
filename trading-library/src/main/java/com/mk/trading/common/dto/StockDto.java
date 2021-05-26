@@ -154,4 +154,13 @@ public class StockDto {
 		this.soldDate = soldDate;
 	}
 
+	@Override
+	public String toString() {
+		return "StockDto [id=" + id + ", stock=" + stock + ", buyQuantity=" + buyQuantity + ", buyPrice=" + buyPrice
+				+ ", buyValue=" + buyValue + ", purchaseDate=" + purchaseDate + ", sellQuantity=" + sellQuantity
+				+ ", sellPrice=" + sellPrice + ", sellValue=" + sellValue + ", profitLoss=" + profitLoss
+				+ ", taxDeducted=" + taxDeducted + ", taxRate=" + taxRate + ", netProfitLoss=" + netProfitLoss
+				+ ", soldDate=" + soldDate + "]";
+	}
+
 }

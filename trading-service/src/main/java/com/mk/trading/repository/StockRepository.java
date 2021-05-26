@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.mk.trading.common.domain.Stock;
 
 @Repository
-public interface TradingRepository extends JpaRepository<Stock, Long> {
+public interface StockRepository extends JpaRepository<Stock, Long> {
 
 }

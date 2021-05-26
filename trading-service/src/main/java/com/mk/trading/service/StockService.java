@@ -3,6 +3,7 @@ package com.mk.trading.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,15 +20,15 @@ import com.mk.trading.common.dto.StockDto;
 import com.mk.trading.common.dto.StockOrderDto;
 import com.mk.trading.common.dto.TaxDto;
 import com.mk.trading.proxy.TaxServiceProxy;
-import com.mk.trading.repository.TradingRepository;
+import com.mk.trading.repository.StockRepository;
 
 @Service
-public class TradingService {
+public class StockService {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	@Autowired
-	private TradingRepository tradingRepo;
+	private StockRepository stockRepo;
 
 	@Autowired
 	private TaxServiceProxy taxServiceProxy;
@@ -36,7 +37,7 @@ public class TradingService {
 
 		logger.info("Fetching all stocks");
 
-		final List<Stock> stocks = tradingRepo.findAll();
+		final List<Stock> stocks = stockRepo.findAll();
 
 		final List<StockDto> result = this.populateStocks(stocks);
 
@@ -44,22 +45,44 @@ public class TradingService {
 		return result;
 	}
 
-	public StockDto fetchStockByPurchaseId(Long purchaseId) {
-		logger.info("{}={} - {}", "MESSAGE", "Fetching stock", purchaseId);
-		final Optional<Stock> stockOpt = tradingRepo.findById(purchaseId);
+	public List<StockDto> fetchStockByPurchaseId(Long purchaseId) {
+		List<StockDto> result = new ArrayList<StockDto>();
+		if (purchaseId == null) {
+			result.addAll(fetchAllStocks());
+		} else {
+			logger.info("{}={} - {}", "MESSAGE", "Fetching stock", purchaseId);
+			final Optional<Stock> stockOpt = stockRepo.findById(purchaseId);
 
-		StockDto stockDto = null;
-		if (stockOpt.isPresent()) {
-			final List<Stock> stocks = new ArrayList<>();
-			stocks.add(stockOpt.get());
+			StockDto stockDto = null;
+			if (stockOpt.isPresent()) {
+				final List<Stock> stocks = new ArrayList<>();
+				stocks.add(stockOpt.get());
 
-			List<StockDto> stockDtos = this.populateStocks(stocks);
-			if (!stockDtos.isEmpty()) {
-				stockDto = stockDtos.get(0);
+				List<StockDto> stockDtos = this.populateStocks(stocks);
+				if (!stockDtos.isEmpty()) {
+					stockDto = stockDtos.get(0);
+				}
 			}
-		}
 
-		logger.info("STOCK=", stockDto != null ? stockDto.toString() : "NULL");
+			logger.info("STOCK=", stockDto != null ? stockDto.toString() : "NULL");
+			result.add(stockDto);
+		}
+		return result;
+	}
+
+	public StockDto buyStock(StockDto stockDto) {
+		final Stock stockDomain = new Stock();
+		stockDomain.setStock(stockDto.getStock());
+		stockDomain.setBuyQuantity(stockDto.getBuyQuantity());
+		stockDomain.setBuyPrice(stockDto.getBuyPrice());
+		stockDomain.setBuyValue(stockDto.getBuyPrice().multiply(new BigDecimal(stockDto.getBuyQuantity())));
+		stockDomain.setClosed('N');
+		stockDomain.setPurchaseDate(new Date());
+
+		logger.info("{}={}", "MESSAGE", "Persisting stock information");
+		stockRepo.save(stockDomain);
+		stockDto.setId(stockDomain.getId());
+		logger.info("{}={}", "STOCK", stockDto.toString());
 		return stockDto;
 	}
 
@@ -67,7 +90,7 @@ public class TradingService {
 
 		logger.info("Fetching stock - {}", purchaseId);
 
-		final Optional<Stock> stockOpt = tradingRepo.findById(purchaseId);
+		final Optional<Stock> stockOpt = stockRepo.findById(purchaseId);
 
 		if (stockOpt.isPresent()) {
 			final Stock stock = stockOpt.get();
@@ -117,7 +140,7 @@ public class TradingService {
 			stockOrder.setStock(stock);
 			stock.getStockOrders().add(stockOrder);
 
-			tradingRepo.save(stock);
+			stockRepo.save(stock);
 			logger.info("Persisting stock order");
 
 			stockOrderDto.setId(stock.getStockOrders().get(0).getId());

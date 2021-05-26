@@ -41,4 +41,9 @@ public class TaxDto {
 		this.sgst = sgst;
 	}
 
+	@Override
+	public String toString() {
+		return "TaxDto [id=" + id + ", igst=" + igst + ", cgst=" + cgst + ", sgst=" + sgst + "]";
+	}
+
 }
