@@ -23,6 +23,9 @@
     Implement front end using Angular or React Framework.
     Implement unit testing using JUnit or Mockito Framework.
     
+# How to test?
+    For convinience, have committed exported postman collection. Refer - MyTrading_Postman_Collection.json.
+    Import this collection into postman client and start testing REST endpoints.
 
 # Application URLs
     Eureka Naming Server  - http://localhost:8761
